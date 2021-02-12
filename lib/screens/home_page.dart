@@ -49,7 +49,18 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
-    //Show result on base of selection
+    //Get search results from api
+    //Populate List Tiles
+    //Return ListView
+
+    return Container(
+      width: 100,
+      height: 50,
+      child: Card(
+        color: Colors.amber,
+        child: Center(child: Text(query)),
+      ),
+    );
   }
 
   @override
@@ -61,6 +72,9 @@ class DataSearch extends SearchDelegate<String> {
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         onTap: () {
+          if (query.isEmpty) {
+            query = suggestionList[index];
+          }
           showResults(context);
         },
         leading: Icon(Icons.list_alt),
