@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hackerSearch/modals/search_result.dart';
+import 'package:hackerSearch/screens/post_details_page.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatelessWidget {
@@ -18,7 +19,6 @@ class HomePage extends StatelessWidget {
               })
         ],
       ),
-      drawer: Drawer(),
     );
   }
 }
@@ -54,7 +54,6 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-
     return FutureBuilder(
         future: getSearchResult(query),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -63,7 +62,15 @@ class DataSearch extends SearchDelegate<String> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PostDetailsPage(
+                                    documentId: snapshot.data[index].storyId,
+                                  )),
+                        );
+                      },
                       tileColor:
                           index.isEven ? Colors.blue[50] : Colors.grey[50],
                       leading: Icon(Icons.image),

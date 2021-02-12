@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Post {
-  int postId;
+  String postId;
   String postTitle;
   String author;
   String url;
