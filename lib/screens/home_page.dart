@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
 
 class DataSearch extends SearchDelegate<String> {
   final List<String> recentSearches = ['Jaipur', 'Delhi'];
-  final List<String> searchResults = ['Jaipur', 'Delhi','Kolkata'];
+  final List<String> searchResults = ['Jaipur', 'Delhi', 'Kolkata'];
   @override
   List<Widget> buildActions(BuildContext context) {
     //actions to perform for app bar
@@ -50,14 +50,14 @@ class DataSearch extends SearchDelegate<String> {
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
     //Show result on base of selection
-    throw UnimplementedError();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     //Show when someone searches for anything
-    final List<String> suggestionList =
-        query.isEmpty ? recentSearches : searchResults;
+    final List<String> suggestionList = query.isEmpty
+        ? recentSearches
+        : searchResults.where((element) => element.startsWith(query)).toList();
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.list_alt),
