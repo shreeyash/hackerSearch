@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SearchResult {
   String storyTitle;
-  int storyId;
+  String storyId;
 
   SearchResult({@required this.storyId, this.storyTitle});
 

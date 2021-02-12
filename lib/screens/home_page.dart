@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hackerSearch/modals/search_result.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatelessWidget {
   @override
@@ -20,8 +24,10 @@ class HomePage extends StatelessWidget {
 }
 
 class DataSearch extends SearchDelegate<String> {
-  final List<String> recentSearches = ['Jaipur', 'Delhi'];
-  final List<String> searchResults = ['Jaipur', 'Delhi', 'Kolkata'];
+  final List<String> recentSearches = ['Hello', 'Fossil'];
+  final List<String> searchResults = ['Hello', 'Fossil'];
+  final String apiUrl = 'https://hn.algolia.com/api/v1/search?query=';
+
   @override
   List<Widget> buildActions(BuildContext context) {
     //actions to perform for app bar
@@ -48,19 +54,32 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    //Get search results from api
-    //Populate List Tiles
-    //Return ListView
 
-    return Container(
-      width: 100,
-      height: 50,
-      child: Card(
-        color: Colors.amber,
-        child: Center(child: Text(query)),
-      ),
-    );
+    return FutureBuilder(
+        future: getSearchResult(query),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                      onTap: () {},
+                      tileColor:
+                          index.isEven ? Colors.blue[50] : Colors.grey[50],
+                      leading: Icon(Icons.image),
+                      subtitle: Text(
+                        snapshot.data[index].storyId,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      title: Text(
+                        snapshot.data[index].storyTitle,
+                        style: TextStyle(color: Colors.blueAccent),
+                      ));
+                });
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   @override
@@ -92,5 +111,20 @@ class DataSearch extends SearchDelegate<String> {
       ),
       itemCount: suggestionList.length,
     );
+  }
+
+  Future<List<SearchResult>> getSearchResult(String query) async {
+    List<SearchResult> apiSearchResults = [];
+    String url = apiUrl + query.toLowerCase() + '&tags=story';
+    var result = await http.get(url);
+    Map<String, dynamic> user = jsonDecode(result.body);
+    List hits = user['hits'];
+    hits.forEach((element) {
+      apiSearchResults.add(SearchResult(
+          storyId: element['objectID'].toString(),
+          storyTitle: element['title']));
+    });
+
+    return apiSearchResults;
   }
 }
