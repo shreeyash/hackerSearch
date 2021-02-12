@@ -60,8 +60,21 @@ class DataSearch extends SearchDelegate<String> {
         : searchResults.where((element) => element.startsWith(query)).toList();
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
+        onTap: () {
+          showResults(context);
+        },
         leading: Icon(Icons.list_alt),
-        title: Text(suggestionList[index]),
+        title: RichText(
+          text: TextSpan(
+              text: suggestionList[index].substring(0, query.length),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              children: [
+                TextSpan(
+                    text: suggestionList[index].substring(query.length),
+                    style: TextStyle(color: Colors.grey))
+              ]),
+        ),
       ),
       itemCount: suggestionList.length,
     );
