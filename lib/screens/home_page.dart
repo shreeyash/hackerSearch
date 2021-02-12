@@ -19,6 +19,13 @@ class HomePage extends StatelessWidget {
               })
         ],
       ),
+      body: Center(
+          child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text('Developed by Shreeyash Haritashya for ApnaHood'),
+        ),
+      )),
     );
   }
 }
